@@ -45,15 +45,27 @@ create table if not exists public.clicks (
   user_agent   text
 );
 
+-- SUGERENCIAS (los usuarios proponen productos para que probemos)
+create table if not exists public.sugerencias (
+  id          bigint generated always as identity primary key,
+  texto       text not null,          -- link de ML o nombre del producto
+  comentario  text,                   -- por qué lo quiere ver probado
+  contacto    text,                   -- email/usuario opcional para avisarle
+  estado      text not null default 'nueva' check (estado in ('nueva','en_prueba','publicada','descartada')),
+  created_at  timestamptz not null default now()
+);
+
 create index if not exists idx_productos_estado    on public.productos (estado);
 create index if not exists idx_productos_categoria on public.productos (categoria);
 create index if not exists idx_productos_vendedor  on public.productos (vendedor_id);
 create index if not exists idx_clicks_producto     on public.clicks (producto_id);
+create index if not exists idx_sugerencias_estado  on public.sugerencias (estado);
 
 -- ── RLS ──────────────────────────────────────────────────────
-alter table public.vendedores enable row level security;
-alter table public.productos  enable row level security;
-alter table public.clicks     enable row level security;
+alter table public.vendedores  enable row level security;
+alter table public.productos   enable row level security;
+alter table public.clicks      enable row level security;
+alter table public.sugerencias enable row level security;
 
 -- Lectura pública: solo productos publicados
 drop policy if exists "productos_select_publicos" on public.productos;
@@ -67,5 +79,5 @@ create policy "vendedores_select_all" on public.vendedores
   for select to anon, authenticated
   using (true);
 
--- clicks: sin políticas anon → solo el service role (server) puede insertar/leer.
--- (el redirect /go usa la service key, que saltea RLS)
+-- clicks y sugerencias: sin políticas anon → solo el service role (server) escribe/lee.
+-- (el redirect /go y el form /sugerir usan la service key vía /api, que saltea RLS)

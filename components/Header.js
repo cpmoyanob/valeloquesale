@@ -9,9 +9,12 @@ export default function Header() {
           <span className="text-xl font-extrabold tracking-tight">{BRAND.wordmark.a}</span>
           <span className="text-xl font-light tracking-tight text-muted">{BRAND.wordmark.b}</span>
         </Link>
-        <nav className="flex items-center gap-5 text-sm font-medium text-muted">
-          <Link href="/" className="hover:text-text">Lo que vale</Link>
-          <Link href="/vendedores" className="hover:text-text">Vendedores</Link>
+        <nav className="flex items-center gap-4 sm:gap-5 text-sm font-medium text-muted">
+          <Link href="/" className="hover:text-text hidden sm:inline">Lo que vale</Link>
+          <Link href="/vendedores" className="hover:text-text hidden sm:inline">Vendedores</Link>
+          <Link href="/sugerir" className="rounded-lg bg-text text-white px-3 py-1.5 hover:opacity-90">
+            Sugerir producto
+          </Link>
         </nav>
       </div>
     </header>
