@@ -52,7 +52,14 @@ export default async function AdminPage() {
           </Link>
         </div>
         <div className="rounded-xl border border-border bg-card divide-y divide-border">
-          {productos.length === 0 && <p className="p-4 text-sm text-muted">Todavía no cargaste productos.</p>}
+          {productos.length === 0 && (
+            <div className="p-8 text-center">
+              <p className="text-muted">Todavía no cargaste productos.</p>
+              <Link href="/admin/producto/nuevo" className="mt-4 inline-block rounded-lg bg-text text-white font-semibold px-5 py-2.5">
+                + Cargar tu primer producto
+              </Link>
+            </div>
+          )}
           {productos.map((p) => (
             <div key={p.id} className="p-3 flex items-center gap-3">
               <div className="w-12 h-12 rounded bg-surface overflow-hidden shrink-0">
